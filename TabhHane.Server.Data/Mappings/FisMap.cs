@@ -18,7 +18,6 @@ namespace TabhHane.Server.Data.Mappings
             builder.Property(p => p.FisKodu).HasMaxLength(12);
             builder.Property(p => p.FisBaglantiKodu).HasMaxLength(14);
             builder.Property(p => p.FisTuru).HasMaxLength(30);
-            builder.Property(p => p.DepoAdi).HasMaxLength(30);
             builder.Property(p => p.BelgeNo).HasMaxLength(20);
             builder.Property(p => p.IskontoOrani).HasPrecision(5, 2);
             builder.Property(p => p.IskontoTutar).HasPrecision(12, 2);
@@ -38,7 +37,7 @@ namespace TabhHane.Server.Data.Mappings
             builder.Property(p => p.PlasiyerId).HasColumnName("PlasiyerId");
             builder.Property(p => p.IskontoOrani).HasColumnName("IskontoOrani");
             builder.Property(p => p.IskontoTutar).HasColumnName("IskontoTutar");
-            builder.Property(p => p.DepoAdi).HasColumnName("DepoAdi");
+            builder.Property(p => p.DepoId).HasColumnName("DepoId");
             builder.Property(p => p.Alacak).HasColumnName("Alacak");
             builder.Property(p => p.Borc).HasColumnName("Borc");
             builder.Property(p => p.ToplamTutar).HasColumnName("ToplamTutar");
@@ -47,8 +46,9 @@ namespace TabhHane.Server.Data.Mappings
 
 
             builder.HasOne(c => c.Cari).WithMany(c => c.Fis).HasForeignKey(c => c.CariId);
-            builder.HasOne(c => c.banka).WithMany(c => c.Fis).HasForeignKey(c => c.BankaId);
+            builder.HasOne(c => c.Banka).WithMany(c => c.Fis).HasForeignKey(c => c.BankaId);
             builder.HasOne(c => c.Personel).WithMany(c => c.Fis).HasForeignKey(c => c.PlasiyerId);
+            builder.HasOne(c => c.Depo).WithMany(c => c.Fisler).HasForeignKey(c => c.DepoId);
         }
     }
 }

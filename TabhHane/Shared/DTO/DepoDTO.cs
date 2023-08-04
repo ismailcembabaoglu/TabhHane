@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TabhHane.Server.Data.Models
+namespace TabhHane.Shared.DTO
 {
-   public class Depo
+    public class DepoDTO
     {
         public int Id { get; set; }
         public string DepoKodu { get; set; }
@@ -19,7 +19,5 @@ namespace TabhHane.Server.Data.Models
         public string Adres { get; set; }
         public string Telefon { get; set; }
         public string Aciklama { get; set; }
-        public virtual ICollection<StokHareket>StokHareket { get; set; }
-        public virtual ICollection<Fis>Fisler { get; set; }
     }
 }

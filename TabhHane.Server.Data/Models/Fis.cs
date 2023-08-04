@@ -41,11 +41,12 @@ namespace TabhHane.Server.Data.Models
         public string Aciklama { get; set; }
         public string FisBaglantiKodu { get; set; }
         public bool DepoIrsaliye { get; set; }
-        public string DepoAdi { get; set; }
-        public virtual Cari Cari { get; set; }
-        public virtual Personel Personel { get; set; }
+        public int DepoId { get; set; }
         public int? BankaId { get; set; }
-        public virtual Banka banka { get; set; }
+        public virtual Cari Cari { get; set; }
+        public virtual Depo Depo { get; set; }
+        public virtual Personel Personel { get; set; }
+        public virtual Banka Banka { get; set; }
 
     }
 }

@@ -1,13 +1,12 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TabhHane.Server.Data.Models
+namespace TabhHane.Shared.DTO
 {
-    public class KullaniciRol
+    public class KullaniciRolDTO
     {
         public int Id { get; set; }
         public int RootId { get; set; }
@@ -17,7 +16,5 @@ namespace TabhHane.Server.Data.Models
         public string FormAdi { get; set; }
         public string KontrolAdi { get; set; }
         public bool Yetki { get; set; }
-        public virtual Kullanici Kullanici { get; set; }
-
     }
 }

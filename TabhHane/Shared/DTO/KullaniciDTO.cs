@@ -1,13 +1,12 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TabhHane.Server.Data.Models
+namespace TabhHane.Shared.DTO
 {
-   public class Kullanici
+    public class KullaniciDTO
     {
         public int Id { get; set; }
         public string KullaniciAdi { get; set; }
@@ -19,7 +18,5 @@ namespace TabhHane.Server.Data.Models
         public string Cevap { get; set; }
         public Nullable<DateTime> KayitTarihi { get; set; }
         public Nullable<DateTime> SonGirisTarihi { get; set; }
-        public ICollection<KullaniciRol> KullaniciRols { get; set; }
-
     }
 }
