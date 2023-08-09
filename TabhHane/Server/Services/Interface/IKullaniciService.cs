@@ -9,6 +9,7 @@ namespace TabhHane.Server.Services.Interface
         public Task<KullaniciDTO> CreateKullanici(KullaniciDTO kullanici);
         public Task<KullaniciDTO> UpdateKullanici(KullaniciDTO kullanici);
         public Task<bool> DeleteUserById(int id);
+        public Task<KullaniciLoginResponseDTO> Login(string kullaniciAdi, string parola);
 
 
     }

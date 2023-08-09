@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabhHane.Client", "TabhHane
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabhHane.Shared", "TabhHane\Shared\TabhHane.Shared.csproj", "{0ABA6813-6DC3-41A2-9E4E-B896F405E357}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabhHane.Server.Data", "TabhHane.Server.Data\TabhHane.Server.Data.csproj", "{24622A73-A094-46B1-82CA-29AC385A590D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabhHane.Server.Data", "TabhHane.Server.Data\TabhHane.Server.Data.csproj", "{24622A73-A094-46B1-82CA-29AC385A590D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

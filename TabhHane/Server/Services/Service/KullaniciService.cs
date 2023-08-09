@@ -1,6 +1,10 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using TabhHane.Server.Data.Context;
 using TabhHane.Server.Data.Models;
 using TabhHane.Server.Services.Interface;
@@ -12,11 +16,12 @@ namespace TabhHane.Server.Services.Service
     {
         private readonly IMapper mapper;
         private readonly TabhHaneContext context;
-
-        public KullaniciService(IMapper Mapper,TabhHaneContext Context)
+        private readonly IConfiguration configuration;
+        public KullaniciService(IMapper Mapper,TabhHaneContext Context, IConfiguration Configuration)
         {
             mapper = Mapper;
             context = Context;
+            configuration = Configuration;
         }
         public async Task<KullaniciDTO> CreateKullanici(KullaniciDTO kullanici)
         {
@@ -48,6 +53,37 @@ namespace TabhHane.Server.Services.Service
         public async Task<List<KullaniciDTO>> GetKullanicis()
         {
             return await context.Kullanicilar.ProjectTo<KullaniciDTO>(mapper.ConfigurationProvider).ToListAsync();
+        }
+
+        public async Task<KullaniciLoginResponseDTO> Login(string kullaniciAdi, string parola)
+        {
+            // Veritabanı Kullanıcı Doğrulama İşlemleri Yapıldı.;
+
+            var dbUser = await context.Kullanicilar.FirstOrDefaultAsync(i => i.KullaniciAdi == kullaniciAdi && i.Parola == parola);
+
+            if (dbUser == null)
+                throw new Exception("User not found or given information is wrong");
+
+
+            KullaniciLoginResponseDTO result = new KullaniciLoginResponseDTO();
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expiry = DateTime.Now.AddDays(int.Parse(configuration["JwtExpiryDays"].ToString()));
+
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Email, kullaniciAdi),
+                new Claim(ClaimTypes.Name,dbUser.Adi+" "+dbUser.Soyadi),
+                new Claim(ClaimTypes.UserData, dbUser.Id.ToString())
+            };
+
+            var token = new JwtSecurityToken(configuration["JwtIssuer"], configuration["JwtAudience"], claims, null, expiry, creds);
+
+            result.ApiToken = new JwtSecurityTokenHandler().WriteToken(token);
+            result.Kullanici = mapper.Map<KullaniciDTO>(dbUser);
+
+            return result;
         }
 
         public async Task<KullaniciDTO> UpdateKullanici(KullaniciDTO kullanici)

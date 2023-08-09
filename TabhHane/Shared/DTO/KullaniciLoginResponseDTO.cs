@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TabhHane.Shared.DTO
+{
+    public class KullaniciLoginResponseDTO
+    {
+        public string ApiToken { get; set; }
+
+        public KullaniciDTO Kullanici { get; set; }
+    }
+}

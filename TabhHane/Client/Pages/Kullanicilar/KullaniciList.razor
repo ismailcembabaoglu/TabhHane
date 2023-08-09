@@ -1,0 +1,30 @@
+﻿@page "/kullanicilist"
+@inherits KullaniciListProcess
+@if (kullaniciList!=null)
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">İsim</th>
+                <th scope="col">Soyisim</th>
+                <th scope="col">Kullanıcı Adı</th>
+                <th scope="col">Görevi</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var kullanici in kullaniciList.ToList())
+            {
+                <tr>
+                    <td>asd</td>
+                    <td>@kullanici.Adi</td>
+                    <td>@kullanici.Soyadi</td>
+                    <td>@kullanici.KullaniciAdi</td>
+                    <td>@kullanici.Gorevi</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+   
+}

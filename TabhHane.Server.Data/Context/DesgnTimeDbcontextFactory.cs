@@ -12,7 +12,7 @@ namespace TabhHane.Server.Data.Context
     {
         public TabhHaneContext CreateDbContext(string[] args)
         {
-            string connectionString = "Server=DESKTOP-SLOIL0F;Database=TabhHaneTest;User Id=sa;Password=17421742;";
+            string connectionString = "Server=DESKTOP-SLOIL0F;Database=TabhHaneTest;User Id=sa;Password=17421742;TrustServerCertificate=True";
             var builder = new DbContextOptionsBuilder<TabhHaneContext>();
             builder.UseSqlServer(connectionString);
             return new TabhHaneContext(builder.Options);
