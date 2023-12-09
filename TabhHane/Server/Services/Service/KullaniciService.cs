@@ -69,7 +69,7 @@ namespace TabhHane.Server.Services.Service
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expiry = DateTime.Now.AddDays(int.Parse(configuration["JwtExpiryDays"].ToString()));
+            var expiry = DateTime.Now.AddDays(1);
 
             var claims = new[]
             {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TabhHane.Server.Services.Interface;
@@ -9,6 +10,7 @@ namespace TabhHane.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class KullaniciController : ControllerBase
     {
         private readonly IKullaniciService kullaniciService;

@@ -1,0 +1,64 @@
+﻿@page "/login"
+@layout TabhHane.Client.Shared.EmptyLayout
+<div class="container-fluid h-100">
+    <div class="row justify-content-center align-items-center h-100">
+
+        <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+
+            <EditForm Model="@kullaniciLoginRequest" OnValidSubmit="LoginProcess">
+                <DataAnnotationsValidator />
+
+                <div class="form-group">
+                    <input @bind-value="kullaniciLoginRequest.KullaniciAdi" class="form-control form-control-lg" type="text" placeholder="E-Mail Address" />
+                </div>
+
+                <div class="form-group">
+                    <input @bind-value="kullaniciLoginRequest.Parola" class="form-control form-control-lg" type="password" placeholder="Password" />
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-info btn-block">Login</button>
+                </div>
+
+            </EditForm>
+
+        </div>
+
+    </div>
+</div>
+
+@code {
+    [Inject]
+    HttpClient client { get; set; }
+    [Inject]
+    NavigationManager NavManager { get; set; }
+    [Inject]
+    ILocalStorageService localStorageService{ get; set; }
+    [Inject]
+    AuthenticationStateProvider authenticationStateProvider { get; set; }
+    [CascadingParameter]
+    public IModalService Modal { get; set; }
+
+    private KullaniciLoginRequestDTO kullaniciLoginRequest = new KullaniciLoginRequestDTO();
+    private async Task LoginProcess()
+    {
+        var httpReqRes= await client.PostAsJsonAsync("/api/kullanici/login", kullaniciLoginRequest);
+        if (httpReqRes.IsSuccessStatusCode)
+        {
+            var result = await httpReqRes.Content.ReadFromJsonAsync<ServiceResponse<KullaniciLoginResponseDTO>>();
+            if (result.Success)
+            {
+                await localStorageService.SetItemAsync("token", result.Value.ApiToken);
+                await localStorageService.SetItemAsync("kullaniciAdi", result.Value.Kullanici.KullaniciAdi);
+                (authenticationStateProvider as AuthStateProvider).NotifyUserLogin(result.Value.Kullanici.KullaniciAdi);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer",result.Value.ApiToken);
+                NavManager.NavigateTo("/");
+            }
+            else
+            {
+                ModalManager ModalManager = new ModalManager(Modal);
+                await  ModalManager.ShowMessageAsync("Login Error", result.Message);
+            }
+        }
+    }
+}

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using NSwag.Generation.Processors.Security;
 using System.Text;
 using TabhHane.Server.Data.Context;
 using TabhHane.Server.Services.Extensions;
@@ -24,8 +26,22 @@ namespace TabhHane
             builder.Services.AddRazorPages();
             builder.Services.AddBlazoredModal();
             builder.Services.ConfigureMapping();
-            builder.Services.AddSwaggerDocument();
+            builder.Services.AddScoped<IKullaniciService, KullaniciService>();
+            builder.Services.AddSwaggerDocument(config =>
+            {
+                config.AddSecurity("Bearer", new NSwag.OpenApiSecurityScheme()
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+                    Name = "Authorization",
+                    Type = NSwag.OpenApiSecuritySchemeType.Basic,
+                    In = NSwag.OpenApiSecurityApiKeyLocation.Header,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                    BearerFormat = JwtBearerDefaults.AuthenticationScheme,
+                });
+                config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("Bearer"));
 
+
+            });
             builder.Services.AddScoped<IKullaniciService, KullaniciService>();
             builder.Services.AddDbContext<TabhHaneContext>(config =>
             {
@@ -45,18 +61,22 @@ namespace TabhHane
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = configuration["JwtIssuer"],
-                    ValidAudience= configuration["JwtAudience"],
-                    IssuerSigningKey =new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]))
+                    ValidAudience = configuration["JwtAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"])),
+                    ClockSkew=TimeSpan.FromDays(1),
+
                 };
+               
             });
             builder.Services.AddBlazoredLocalStorage();
 
-             var app = builder.Build();
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseWebAssemblyDebugging();
+                app.UseDeveloperExceptionPage();
             }
             else
             {
@@ -71,7 +91,8 @@ namespace TabhHane
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthorization();
+            app.UseAuthentication();
             app.UseOpenApi();
             app.UseSwaggerUi3();
             app.MapRazorPages();

@@ -1,0 +1,22 @@
+﻿@page "/logout"
+<h3>Logout</h3>
+
+@code {
+    [Inject]
+    ILocalStorageService localStorageService { get; set; }
+    [Inject]
+    AuthenticationStateProvider authenticationStateProvider { get; set; }
+    [Inject]
+    HttpClient client { get; set; }
+    [Inject]
+    NavigationManager NavManager { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        await localStorageService.RemoveItemAsync("token");
+        await localStorageService.RemoveItemAsync("kullaniciAdi");
+        (authenticationStateProvider as AuthStateProvider).NotifyUserLogout();
+        client.DefaultRequestHeaders.Authorization =null;
+
+        NavManager.NavigateTo("/login");
+    }
+}
